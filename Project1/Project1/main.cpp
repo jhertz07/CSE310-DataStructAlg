@@ -17,40 +17,36 @@ int main(int argc, const char * argv[]) {
     
     //put string into an array
     int length = (unsigned)word.length(); // get length of string
-    char* input_arr = new char[length]; // create char array using length
-    strcpy(input_arr, word.c_str()); // copies string to char array
     
     // create an array of pointers to store each array of the shifted word
-    char** words_arr = new char* [length-1];
-    char temp; // used for shifting array elements
+    char** shift_arr = new char*[length];
+    for (int i = 0; i < length; ++i) {
+        shift_arr[i] = new char[length];
+    }
+    // Take the inputted word and save it to the first index of shift_arr
+    strcpy(shift_arr[0], word.c_str());
     
-    // move each char over to the left and save into new array
-    for (int i = 0; i < length-1; i++) {
-        
-//        // print char array for testing
-//        for (int v = 0; v < length; v++) {
-//            cout << input_arr[v] << " ";
-//        }
-//        cout << "\n";
-        
-        words_arr[i] = input_arr;
-        temp = input_arr[0];
+    char temp; //temp variable to shift elements
+    string copy; //temp variable to copy character arrays
+    // Cyclic shift loop
+    for (int i = 1; i < length; i++) {
+        // copy previous shifted word to current index
+        copy = shift_arr[i-1];
+        strcpy(shift_arr[i], copy.c_str());
+        // save first element in temp
+        temp = shift_arr[i][0];
         // loop to shift elements left
         for (int j = 0; j < length-1; j++) { // stop loop one before last element
-            input_arr[j] = input_arr[j+1];
+            shift_arr[i][j] = shift_arr[i][j+1];
         }
-        input_arr[length-1] = temp; // make last element equal temp (first element)
-        cout << words_arr[i] <<"\n";
+        shift_arr[i][length-1] = temp; // make last element equal temp (first element)
+        cout << shift_arr[i] <<"\n"; // print shift_arr for visual purposes
     }
-    
-    
-//    for (int i = 0; i <= length; i++) {
-//        cout << i << "\n";
-//        for (int j = 0; j < length; j++) {
-//            cout << words_arr[i] << " ";
-//        }
-//        cout << "\n";
-//    }
-    
     return 0;
+}
+
+char** insertionSort(char** unsorted_arr, int length) {
+    char** sorted = unsorted_arr;
+    
+    return sorted;
 }
