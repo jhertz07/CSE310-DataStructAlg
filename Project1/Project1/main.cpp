@@ -10,6 +10,8 @@
 #include <stdlib.h>
 using namespace std;
 
+char** insertionSort(char**, int);
+
 int main(int argc, const char * argv[]) {
     cout << "Input string here\n"; // input string to be encoded
     string word;
@@ -42,11 +44,31 @@ int main(int argc, const char * argv[]) {
         shift_arr[i][length-1] = temp; // make last element equal temp (first element)
         cout << shift_arr[i] <<"\n"; // print shift_arr for visual purposes
     }
+    insertionSort(shift_arr, length);
     return 0;
 }
 
+// does not work at all
 char** insertionSort(char** unsorted_arr, int length) {
     char** sorted = unsorted_arr;
-    
+    int ikey;
+    string key;
+    int j;
+    for (int i = 1; i < length; ++i) {
+        ikey = int(sorted[i][length-1]);
+        key = sorted[i];
+        j = i-1;
+        // find ASCII value by printing int(char)
+        while (j >= 0 && int(sorted[j][length-1]) > ikey) {
+            sorted[j+1] = sorted[j];
+            j = j-1;
+        }
+        strcpy(sorted[j+1], key.c_str());
+        cout << "\n" << int(sorted[j+1][length-1]) << "\n";
+    }
+    cout << "sorted\n\n";
+    for (int i = 0; i < length; i++) {
+        cout << sorted[i] << "\n";
+    }
     return sorted;
 }
