@@ -44,24 +44,24 @@ int main(int argc, const char * argv[]) {
         }
         shift_arr[i][length-1] = temp; // make last element equal temp (first element)
     }
+    cout << "\nprinted array:\n";
     print_arr(shift_arr, length);
     insertionSort(shift_arr, length);
+    cout << "\nsorted array:\n";
     print_arr(shift_arr, length);
     return 0;
 }
 
 char** insertionSort(char** unsorted_arr, int length) {
     char** sorted = unsorted_arr;
-    int ikey; // integer value of current i position
     string temp;
     int j;
     for (int i = 1; i < length; i++) {
-        ikey = int(sorted[i][length-1]);
         j = i;
         // find ASCII value by printing int(char)
         while (j > 0 && int(sorted[j-1][length-1]) > int(sorted[j][length-1])) {
             temp = sorted[j];
-            sorted[j] = sorted[j-1];
+            strcpy(sorted[j], sorted[j-1]);
             strcpy(sorted[j-1], temp.c_str());
             j--;
         }
@@ -70,7 +70,6 @@ char** insertionSort(char** unsorted_arr, int length) {
 }
 
 void print_arr(char** arr, int length) {
-    cout << "\nprinted array:\n";
     for (int i = 0; i < length; i++) {
         cout << arr[i] << "\n";
     }
