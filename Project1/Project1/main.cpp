@@ -11,6 +11,7 @@
 using namespace std;
 
 char** insertionSort(char**, int);
+void print_arr(char**, int);
 
 int main(int argc, const char * argv[]) {
     cout << "Input string here\n"; // input string to be encoded
@@ -42,33 +43,35 @@ int main(int argc, const char * argv[]) {
             shift_arr[i][j] = shift_arr[i][j+1];
         }
         shift_arr[i][length-1] = temp; // make last element equal temp (first element)
-        cout << shift_arr[i] <<"\n"; // print shift_arr for visual purposes
     }
+    print_arr(shift_arr, length);
     insertionSort(shift_arr, length);
+    print_arr(shift_arr, length);
     return 0;
 }
 
-// does not work at all
 char** insertionSort(char** unsorted_arr, int length) {
     char** sorted = unsorted_arr;
-    int ikey;
-    string key;
+    int ikey; // integer value of current i position
+    string temp;
     int j;
-    for (int i = 1; i < length; ++i) {
+    for (int i = 1; i < length; i++) {
         ikey = int(sorted[i][length-1]);
-        key = sorted[i];
-        j = i-1;
+        j = i;
         // find ASCII value by printing int(char)
-        while (j >= 0 && int(sorted[j][length-1]) > ikey) {
-            sorted[j+1] = sorted[j];
-            j = j-1;
+        while (j > 0 && int(sorted[j-1][length-1]) > int(sorted[j][length-1])) {
+            temp = sorted[j];
+            sorted[j] = sorted[j-1];
+            strcpy(sorted[j-1], temp.c_str());
+            j--;
         }
-        strcpy(sorted[j+1], key.c_str());
-        cout << "\n" << int(sorted[j+1][length-1]) << "\n";
-    }
-    cout << "sorted\n\n";
-    for (int i = 0; i < length; i++) {
-        cout << sorted[i] << "\n";
     }
     return sorted;
+}
+
+void print_arr(char** arr, int length) {
+    cout << "\nprinted array:\n";
+    for (int i = 0; i < length; i++) {
+        cout << arr[i] << "\n";
+    }
 }
