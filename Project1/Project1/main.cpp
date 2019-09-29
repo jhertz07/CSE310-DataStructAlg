@@ -13,7 +13,7 @@ using namespace std;
 
 void insertionSort(char**, int);
 void print_arr(char**, int);
-void encode (char**, int, string);
+string encode (char**, int, string);
 
 int main(int argc, const char * argv[]) {
     //cout << "Input string here\n"; // input string to be encoded
@@ -91,7 +91,8 @@ void insertionSort(char** unsorted_arr, int length) {
         }
     }
 }
-void encode (char** array, int length, string original) {
+string encode (char** array, int length, string original) {
+    string last = "";
     char output; // char to be outputted (last letter of each string
     int cluster = 1; // size of cluster
     // find and output original index
@@ -105,6 +106,7 @@ void encode (char** array, int length, string original) {
     // encoded output
     for (int i = 0; i < length; i++) {
         output = array[i][length-1];
+        last = last + output; // string of last letter of each sorted element
         if ((i < (length-1)) && array[i+1][length-1] == output) {
             cluster++;
         }
@@ -114,7 +116,13 @@ void encode (char** array, int length, string original) {
         }
     }
     cout << "\n";
+    return last;
 }
+//void decode (char** array, int length, int orig_index) {
+//    for (int i = 0; i < (length-orig_index); i++) {
+//
+//    }
+//}
 
 // print function
 void print_arr(char** arr, int length) {
