@@ -10,12 +10,18 @@
 #include "defn.h"
 #include <stdlib.h>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
-ifstream details_1950("details-1950.csv");
-
 int main(int argc, const char * argv[]) {
+    // open csv files
+    ifstream details_1950;
+    details_1950.open("details-1950.csv");
+    if (details_1950.is_open()) {
+        cout << "worked\n";
+    }
+    
     int num_of_years;
     // get num of years thru command line arg
     if ((num_of_years = atoi(argv[1])));
@@ -27,8 +33,8 @@ int main(int argc, const char * argv[]) {
     }
     string temp; // store the csv line, needs updating
     int detail_count = 0;
-    while (getline(details_1950, temp, '\n')) {
+    while (getline(details_1950, temp)) {
         detail_count++;
     }
-    cout << detail_count;
+    cout << detail_count << "\n";
 }
