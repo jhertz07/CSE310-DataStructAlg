@@ -4,7 +4,7 @@
 #define	COUNTY_LEN	30
 #define	TOR_LEN		4
 #define DATE_LEN    20
-#define FAC_LOC     25
+#define FAT_LOC     25
 
 struct annual_storms{
 	int year; // Year of storm events
@@ -37,12 +37,14 @@ struct fatality_event{
     int fatality_age; // Age of fatality
     char fatality_sex; // Gender of fatality
     char fatality_location[ FAT_LOC ]; // Location of fatality
+    struct fatality_event *next; // Pointer to next fatality event
 };
 
 struct hash_table_entry{
     char event_id; // Event id -- key used to hash on
     int year; // Year of storm event
     int event_index; // For the given year, the index into array of storm events
+    struct hash_table_entry *next; // Pointer to next entry in case of collisions
 };
 
 struct bst{ // A binary search tree

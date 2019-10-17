@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "45E48DFA2358103E0054997A"
+               BlueprintIdentifier = "45E48E29235902760054997A"
                BuildableName = "Project2"
                BlueprintName = "Project2"
                ReferencedContainer = "container:Project2.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "45E48DFA2358103E0054997A"
+            BlueprintIdentifier = "45E48E29235902760054997A"
             BuildableName = "Project2"
             BlueprintName = "Project2"
             ReferencedContainer = "container:Project2.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "45E48DFA2358103E0054997A"
+            BlueprintIdentifier = "45E48E29235902760054997A"
             BuildableName = "Project2"
             BlueprintName = "Project2"
             ReferencedContainer = "container:Project2.xcodeproj">
@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "storm 1 1950"
+            argument = "1 1950"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
@@ -80,7 +80,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "45E48DFA2358103E0054997A"
+            BlueprintIdentifier = "45E48E29235902760054997A"
             BuildableName = "Project2"
             BlueprintName = "Project2"
             ReferencedContainer = "container:Project2.xcodeproj">
