@@ -11,6 +11,7 @@
 #include "defn.h"
 #include <stdlib.h>
 #include <fstream>
+#include <sstream>
 #include <string>
 
 void initStormYear(int, int);
@@ -26,6 +27,7 @@ public:
     ifstream fatalities;
     //declare dyanmic arrays
     annual_storms* year;
+    
 };
 
 storm s; // call constructor as a global variable
@@ -59,9 +61,46 @@ void initStormYear(int year, int i) {
 }
 // initialize storm events for given year
 void initStormEvents(int i_year) {
+    string line; string field; istringstream stream;
+    openStream(s.year[i_year].year); //reset stream
+    getline(s.details, line); // move past first line
+    // iterate thru the number of lines in csv file
     for (int i = 0; i < s.year[i_year].num_of_storms; i++) {
-        // s.year[i].events->event_id = getline(s.details)
+        // take in entire line
+        getline(s.details, line);
+        stream.str(line);
+        //take in each comma separated field in line
+        getline(stream, field, ',');
+        s.year[i_year].events[i].event_id = stoi(field);
+        getline(stream, field, ',');
+        strcpy(s.year[i_year].events[i].state, field.c_str());
+        getline(stream, field, ',');
+        s.year[i_year].events->year = stoi(field);
+        getline(stream, field, ',');
+        strcpy(s.year[i_year].events[i].month_name, field.c_str());
+        getline(stream, field, ',');
+        strcpy(s.year[i_year].events[i].event_type, field.c_str());
+        getline(stream, field, ',');
+        s.year[i_year].events[i].cz_type = field[0];
+        getline(stream, field, ',');
+        strcpy(s.year[i_year].events[i].cz_name, field.c_str());
+        getline(stream, field, ',');
+        s.year[i_year].events[i].injuries_direct = stoi(field);
+        getline(stream, field, ',');
+        s.year[i_year].events[i].injuries_indirect = stoi(field);
+        getline(stream, field, ',');
+        s.year[i_year].events[i].deaths_direct = stoi(field);
+        getline(stream, field, ',');
+        s.year[i_year].events[i].deaths_indirect = stoi(field);
+        getline(stream, field, ',');
+        s.year[i_year].events[i].damage_property = stoi(field);
+        getline(stream, field, ',');
+        s.year[i_year].events[i].damage_crops = stoi(field);
+        getline(stream, field, ',');
+        strcpy(s.year[i_year].events[i].tor_f_scale, field.c_str());
+        stream.clear();
     }
+    
 }
 void openStream(int storm_year) {
     // close streams first
