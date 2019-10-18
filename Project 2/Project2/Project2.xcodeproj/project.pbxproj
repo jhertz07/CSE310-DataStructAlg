@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		45E48E2E235902760054997A /* storm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E48E2D235902760054997A /* storm.cpp */; };
+		45A596DE235A4ED8001F4113 /* storm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45A596DD235A4ED8001F4113 /* storm.cpp */; };
+		45E48E2E235902760054997A /* stormYear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E48E2D235902760054997A /* stormYear.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +24,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		45A596DD235A4ED8001F4113 /* storm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = storm.cpp; sourceTree = "<group>"; };
 		45E48E2A235902760054997A /* Project2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project2; sourceTree = BUILT_PRODUCTS_DIR; };
-		45E48E2D235902760054997A /* storm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = storm.cpp; sourceTree = "<group>"; };
+		45E48E2D235902760054997A /* stormYear.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stormYear.cpp; sourceTree = "<group>"; };
 		45E48E34235902D00054997A /* defn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defn.h; sourceTree = "<group>"; };
 		45E48E372359102D0054997A /* details-1950.csv */ = {isa = PBXFileReference; lastKnownFileType = file; name = "details-1950.csv"; path = "1950-1952/details-1950.csv"; sourceTree = "<group>"; };
 		45E48E38235912EA0054997A /* fatalities-1952.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = "fatalities-1952.csv"; sourceTree = "<group>"; };
@@ -64,7 +66,8 @@
 		45E48E2C235902760054997A /* Project2 */ = {
 			isa = PBXGroup;
 			children = (
-				45E48E2D235902760054997A /* storm.cpp */,
+				45A596DD235A4ED8001F4113 /* storm.cpp */,
+				45E48E2D235902760054997A /* stormYear.cpp */,
 				45E48E34235902D00054997A /* defn.h */,
 				45E48E372359102D0054997A /* details-1950.csv */,
 				45E48E39235912EA0054997A /* details-1951.csv */,
@@ -132,7 +135,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45E48E2E235902760054997A /* storm.cpp in Sources */,
+				45E48E2E235902760054997A /* stormYear.cpp in Sources */,
+				45A596DE235A4ED8001F4113 /* storm.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
