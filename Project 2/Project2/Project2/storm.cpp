@@ -12,25 +12,33 @@
 #include <fstream>
 #include <string>
 
-void initialize_storm(storm_event);
+void init_storm(storm_event);
 
 using namespace std;
 
-int main(int argc, const char * argv[]) {
-    // open csv files
+class storm {
+public:
+    //open streams - remember to close streams (deconstructor?)
     ifstream details_1950;
-    details_1950.open("details-1950.csv");
     ifstream fatalities_1950;
-    fatalities_1950.open("fatalities-1950.csv");
     ifstream details_1951;
-    details_1951.open("details-1951.csv");
     ifstream fatalities_1951;
-    fatalities_1951.open("fatalities-1951.csv");
     ifstream details_1952;
-    details_1952.open("details-1952.csv");
     ifstream fatalities_1952;
-    fatalities_1952.open("fatalities-1952.csv");
     
+    storm() {
+    // open csv files
+    details_1950.open("details-1950.csv");
+    fatalities_1950.open("fatalities-1950.csv");
+    details_1951.open("details-1951.csv");
+    fatalities_1951.open("fatalities-1951.csv");
+    details_1952.open("details-1952.csv");
+    fatalities_1952.open("fatalities-1952.csv");
+    }
+};
+
+int main(int argc, const char * argv[]) {
+    storm s; // call constructor
     int num_of_years;
     // get num of years thru command line arg
     if ((num_of_years = atoi(argv[1])));
@@ -45,24 +53,23 @@ int main(int argc, const char * argv[]) {
         // find which file to read from
         num_of_lines = 0;
         if (year[i].year == 1950) {
-            while(getline(details_1950, line)) {
+            while(getline(s.details_1950, line)) {
                 num_of_lines++;
             }
         }
         else if (year[i].year == 1951) {
-            while(getline(details_1951, line)) {
+            while(getline(s.details_1951, line)) {
                 num_of_lines++;
             }
         }
         else if (year[i].year == 1952) {
-            while(getline(details_1952, line)) {
+            while(getline(s.details_1952, line)) {
                 num_of_lines++;
             }
         }
+        year[i].events = new storm_event[num_of_lines-1];
     }
-    cout << num_of_lines << "\n";
 }
-
-void initialize_storm(storm_event storm) {
+void init_storm(storm_event storm) {
     
 }
