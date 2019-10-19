@@ -8,7 +8,7 @@
 
 struct annual_storms{
 	int year; // Year of storm events
-    int num_of_storms;
+    int num_of_storms; // number of storms in a given year
 	struct storm_event *events;  // Pointer to array of storm events for the given year
 };
 

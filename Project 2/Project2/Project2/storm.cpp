@@ -13,10 +13,14 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <math.h>
 
 void initStormYear(int, int);
 void initStormEvents(int);
 void openStream(int);
+void setHashSize(int);
+bool testPrime(int);
+void addToHash(int, int);
 
 using namespace std;
 
@@ -27,12 +31,14 @@ public:
     ifstream fatalities;
     //declare dyanmic arrays
     annual_storms* year;
+    hash_table_entry** hash; // hash is an array of pointers to hash_table_entry
+    int hash_size;
     
 };
 
 storm s; // call constructor as a global variable
 int main(int argc, const char * argv[]) {
-    int num_of_years;
+    int num_of_years; // globally define number of years
     // get num of years thru command line arg
     if ((num_of_years = atoi(argv[1])));
     else return 0;
@@ -42,6 +48,12 @@ int main(int argc, const char * argv[]) {
     // initialize each year of storms
     for (int i = 0; i < num_of_years; i++) {
         initStormYear(atoi(argv[i+2]), i); // match year to arg input
+    }
+    // set up hash
+    setHashSize(num_of_years);
+    // initialize events for each year of storms and hash
+    for (int i = 0; i < num_of_years; i++) {
+        initStormEvents(i); // intialize each storm event for i year
     }
 }
 // initialize each year
@@ -57,7 +69,6 @@ void initStormYear(int year, int i) {
     }
     s.year[i].events = new storm_event[num_of_lines-1]; // make array size of number of storms
     s.year[i].num_of_storms = num_of_lines-1; // save number of storms for given year
-    initStormEvents(i); // intialize each storm event
 }
 // initialize storm events for given year
 void initStormEvents(int i_year) {
@@ -109,10 +120,38 @@ void initStormEvents(int i_year) {
         strcpy(s.year[i_year].events[i].tor_f_scale, field.c_str());
         stream.clear();
     }
+    cout << s.year[i_year].events[222].event_id << "\n";
+    cout << s.year[i_year].events[222].damage_property << "\n";
+}
+void setHashSize (int num_of_years) {
+    // declare variable for total storms across all years
+    int total_storms = 0; int closest_prime;
+    for (int i = 0; i < num_of_years; i++) {
+        total_storms += s.year[i].num_of_storms;
+    }
+    closest_prime = 2 * total_storms;
+    while (!testPrime(closest_prime)) {
+        closest_prime++;
+    }
+    s.hash_size = closest_prime;
+    s.hash = new hash_table_entry*[s.hash_size];
+    // set all pointers to in array to NULL;
+    for (int i = 0; i < s.hash_size; i++) {
+        s.hash[i] = NULL;
+    }
+}
+// test if inputted number is prime
+bool testPrime( int val )
+{
+    int limit, factor = 2;
     
-    cout << s.year[i_year].events[73].event_id << "\n";
-    cout << s.year[i_year].events[73].damage_property << "\n";
+    limit = (long)( sqrtf( (float) val ) + 0.5f );
+    while( (factor <= limit) && (val % factor) )
+        factor++;
     
+    return( factor > limit );
+}
+void addToHash(int year_i, int storm_i) {
     
 }
 void openStream(int storm_year) {
