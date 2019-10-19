@@ -61,7 +61,7 @@ void initStormYear(int year, int i) {
 }
 // initialize storm events for given year
 void initStormEvents(int i_year) {
-    string line; string field; istringstream stream;
+    string line; string field; istringstream stream; float f_dmg;
     openStream(s.year[i_year].year); //reset stream
     getline(s.details, line); // move past first line
     // iterate thru the number of lines in csv file
@@ -93,13 +93,26 @@ void initStormEvents(int i_year) {
         getline(stream, field, ',');
         s.year[i_year].events[i].deaths_indirect = stoi(field);
         getline(stream, field, ',');
-        s.year[i_year].events[i].damage_property = stoi(field);
+        if (field[field.length()-1] == 'K') { // if string ends in K process as so
+            f_dmg = stof(field);
+            f_dmg = f_dmg*1000;
+            s.year[i_year].events[i].damage_property = int(f_dmg);
+        }
+        else { // otherwise process as M
+            f_dmg = stof(field);
+            f_dmg = f_dmg*1000000;
+            s.year[i_year].events[i].damage_property = int(f_dmg);
+        }
         getline(stream, field, ',');
         s.year[i_year].events[i].damage_crops = stoi(field);
         getline(stream, field, ',');
         strcpy(s.year[i_year].events[i].tor_f_scale, field.c_str());
         stream.clear();
     }
+    
+    cout << s.year[i_year].events[73].event_id << "\n";
+    cout << s.year[i_year].events[73].damage_property << "\n";
+    
     
 }
 void openStream(int storm_year) {
