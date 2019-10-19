@@ -42,7 +42,7 @@ struct fatality_event{
 };
 
 struct hash_table_entry{
-    char event_id; // Event id -- key used to hash on
+    int event_id; // Event id -- key used to hash on
     int year; // Year of storm event
     int event_index; // For the given year, the index into array of storm events
     struct hash_table_entry *next; // Pointer to next entry in case of collisions

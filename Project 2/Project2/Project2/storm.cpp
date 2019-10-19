@@ -48,6 +48,7 @@ int main(int argc, const char * argv[]) {
     // initialize each year of storms
     for (int i = 0; i < num_of_years; i++) {
         initStormYear(atoi(argv[i+2]), i); // match year to arg input
+        
     }
     // set up hash
     setHashSize(num_of_years);
@@ -119,9 +120,26 @@ void initStormEvents(int i_year) {
         getline(stream, field, ',');
         strcpy(s.year[i_year].events[i].tor_f_scale, field.c_str());
         stream.clear();
+        // add storm event to hash
+        addToHash(i_year, i);
     }
-    cout << s.year[i_year].events[222].event_id << "\n";
-    cout << s.year[i_year].events[222].damage_property << "\n";
+}
+void addToHash(int year_i, int storm_i) {
+    int hash_i; // index to place in hash table
+    hash_i = s.year[year_i].events[storm_i].event_id % s.hash_size;
+    // if the hash index is empty, allocate new pointer and set it
+    if (s.hash[hash_i] == NULL) {
+        s.hash[hash_i] = new hash_table_entry;
+        s.hash[hash_i]->event_id = s.year[year_i].events[storm_i].event_id;
+        s.hash[hash_i]->event_index = storm_i;
+        s.hash[hash_i]->year = s.year[year_i].year;
+        s.hash[hash_i]->next = NULL;
+        cout << "test";
+    }
+    // else use separate chaining, create new pointer and assign it as head
+    else {
+        
+    }
 }
 void setHashSize (int num_of_years) {
     // declare variable for total storms across all years
@@ -134,11 +152,7 @@ void setHashSize (int num_of_years) {
         closest_prime++;
     }
     s.hash_size = closest_prime;
-    s.hash = new hash_table_entry*[s.hash_size];
-    // set all pointers to in array to NULL;
-    for (int i = 0; i < s.hash_size; i++) {
-        s.hash[i] = NULL;
-    }
+    s.hash = new hash_table_entry*[s.hash_size](); // initalize with null pointers ()
 }
 // test if inputted number is prime
 bool testPrime( int val )
@@ -150,9 +164,6 @@ bool testPrime( int val )
         factor++;
     
     return( factor > limit );
-}
-void addToHash(int year_i, int storm_i) {
-    
 }
 void openStream(int storm_year) {
     // close streams first
