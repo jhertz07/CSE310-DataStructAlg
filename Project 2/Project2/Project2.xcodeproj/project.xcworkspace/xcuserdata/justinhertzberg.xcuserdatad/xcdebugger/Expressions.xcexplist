@@ -4,9 +4,19 @@
    <ContextStates>
       <ContextState
          contextName = "addToHash(int, int):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(hash_table_entry*(&amp;)[991]) *s.hash">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "initStormEvents(int):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(storm_event(&amp;)[223]) *s.year.events">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "openStream(int):storm.cpp">
@@ -18,7 +28,10 @@
          contextName = "main:storm.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "">
+               value = "(hash_table_entry*(&amp;)[1000]) *s.hash">
+            </PersistentString>
+            <PersistentString
+               value = "(storm_event(&amp;)[223]) *s.year.events">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

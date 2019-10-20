@@ -3,9 +3,6 @@
 //  Project2
 //
 //  Created by Justin Hertzberg on 10/16/19.
-// CAN RESTRUCTURE THIS TO WORK SEPARATELY FROM A MAIN.CPP FILE WHICH CALLS
-// THIS CLASS FOR EACH YEAR. ie pass which year csv files to open by string
-//
 
 #include <iostream>
 #include "defn.h"
@@ -122,10 +119,12 @@ void initStormEvents(int i_year) {
         stream.clear();
         // add storm event to hash
         addToHash(i_year, i);
+        
     }
 }
 void addToHash(int year_i, int storm_i) {
     int hash_i; // index to place in hash table
+    hash_table_entry *temp = NULL; // temp pointer for swapping
     hash_i = s.year[year_i].events[storm_i].event_id % s.hash_size;
     // if the hash index is empty, allocate new pointer and set it
     if (s.hash[hash_i] == NULL) {
@@ -134,12 +133,19 @@ void addToHash(int year_i, int storm_i) {
         s.hash[hash_i]->event_index = storm_i;
         s.hash[hash_i]->year = s.year[year_i].year;
         s.hash[hash_i]->next = NULL;
-        cout << "test";
+
     }
     // else use separate chaining, create new pointer and assign it as head
     else {
-        
+        temp = s.hash[hash_i]; // point temp towards old head
+        s.hash[hash_i] = new hash_table_entry; // point to new memory
+        s.hash[hash_i]->event_id = s.year[year_i].events[storm_i].event_id;
+        s.hash[hash_i]->event_index = storm_i;
+        s.hash[hash_i]->year = s.year[year_i].year;
+        s.hash[hash_i]->next = temp; // link temp pointer
+        cout << hash_i << "\n";
     }
+    
 }
 void setHashSize (int num_of_years) {
     // declare variable for total storms across all years
@@ -152,7 +158,10 @@ void setHashSize (int num_of_years) {
         closest_prime++;
     }
     s.hash_size = closest_prime;
-    s.hash = new hash_table_entry*[s.hash_size](); // initalize with null pointers ()
+    s.hash = new hash_table_entry*[s.hash_size];
+    for (int i = 0; i < s.hash_size; i++) { // set all to null
+        s.hash[i] = NULL;
+    }
 }
 // test if inputted number is prime
 bool testPrime( int val )
