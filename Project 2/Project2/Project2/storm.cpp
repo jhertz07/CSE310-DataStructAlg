@@ -202,7 +202,10 @@ void hashFatality(int year_i) {
             s.year[year_i].events[index].f = new fatality_event;
             s.year[year_i].events[index].f->next = f_event;
             }
-        else s.year[year_i].events[index].f = new fatality_event;
+        else {
+            s.year[year_i].events[index].f = new fatality_event;
+            s.year[year_i].events[index].f->next = NULL;
+        }
             // iterate thru fatality file
             s.year[year_i].events[index].f->event_id = e_id;
             s.year[year_i].events[index].f->fatality_id = f_id;
@@ -238,16 +241,6 @@ void openStream(int storm_year) {
     s.details.close();
     s.fatalities.close();
     // open stream for desired year
-    if (storm_year == 1950) {
-        s.details.open("details-1950.csv");
-        s.fatalities.open("fatalities-1950.csv");
-    }
-    else if (storm_year == 1951) {
-        s.details.open("details-1951.csv");
-        s.fatalities.open("fatalities-1951.csv");
-    }
-    else if (storm_year == 1952) {
-        s.details.open("details-1952.csv");
-        s.fatalities.open("fatalities-1952.csv");
-    }
+    s.details.open("details-"+to_string(storm_year)+".csv");
+    s.fatalities.open("fatalities-"+to_string(storm_year)+".csv");
 }
