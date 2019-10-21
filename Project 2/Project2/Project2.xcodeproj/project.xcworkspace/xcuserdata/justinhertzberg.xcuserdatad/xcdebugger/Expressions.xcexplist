@@ -25,6 +25,17 @@
          contextName = "setHashSize(int):storm.cpp">
       </ContextState>
       <ContextState
+         contextName = "hashFatality(int):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(hash_table_entry*(&amp;)[1000])*s.hash">
+            </PersistentString>
+            <PersistentString
+               value = "(storm_event(&amp;)[223]) *s.year.events">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "main:storm.cpp">
          <PersistentStrings>
             <PersistentString

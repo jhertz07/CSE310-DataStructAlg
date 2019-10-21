@@ -18,6 +18,7 @@ void openStream(int);
 void setHashSize(int);
 bool testPrime(int);
 void addToHash(int, int);
+void hashFatality(int);
 
 using namespace std;
 
@@ -49,9 +50,13 @@ int main(int argc, const char * argv[]) {
     }
     // set up hash
     setHashSize(num_of_years);
-    // initialize events for each year of storms and hash
+    // initialize events for each year of storms and set up hash
     for (int i = 0; i < num_of_years; i++) {
         initStormEvents(i); // intialize each storm event for i year
+    }
+    // hash fatalities for each year
+    for (int i = 0; i < num_of_years; i++) {
+        hashFatality(i);
     }
 }
 // initialize each year
@@ -119,7 +124,6 @@ void initStormEvents(int i_year) {
         stream.clear();
         // add storm event to hash
         addToHash(i_year, i);
-        
     }
 }
 void addToHash(int year_i, int storm_i) {
@@ -143,7 +147,6 @@ void addToHash(int year_i, int storm_i) {
         s.hash[hash_i]->event_index = storm_i;
         s.hash[hash_i]->year = s.year[year_i].year;
         s.hash[hash_i]->next = temp; // link temp pointer
-        cout << hash_i << "\n";
     }
     
 }
@@ -161,6 +164,62 @@ void setHashSize (int num_of_years) {
     s.hash = new hash_table_entry*[s.hash_size];
     for (int i = 0; i < s.hash_size; i++) { // set all to null
         s.hash[i] = NULL;
+    }
+}
+void hashFatality(int year_i) {
+    string line; string field; istringstream stream; int index; int e_id; int f_size = -1; // -1 to account for header line
+    hash_table_entry *h_index; fatality_event *f_event; int f_id;
+    openStream(s.year[year_i].year);
+    // find number of lines in fatality csv;
+    while (getline(s.fatalities, line)) {
+        f_size++;
+    }
+    openStream(s.year[year_i].year); // reset stream
+    getline(s.fatalities, line); // move past first line
+    // iterate thru fatalities file to and match event id
+    for (int i = 0; i < f_size; i++) {
+        getline(s.fatalities, line);
+        stream.str(line);
+        // go to second field
+        getline(stream, field, ',');
+        f_id = stoi(field); // save for later
+        getline(stream, field, ',');
+        // find hash index
+        e_id = stoi(field);
+        index = e_id % s.hash_size;
+        h_index = s.hash[index];
+        // match event id with possible linked list in hash table
+        while(h_index != NULL) {
+            if (h_index->event_id == e_id) {
+                index = h_index->event_index;
+                break;
+            }
+            else h_index = h_index->next;
+        }
+        // if there is already a fatality event, replace as head
+        if (s.year[year_i].events[index].f != NULL) {
+            f_event = s.year[year_i].events[index].f;
+            s.year[year_i].events[index].f = new fatality_event;
+            s.year[year_i].events[index].f->next = f_event;
+            }
+        else s.year[year_i].events[index].f = new fatality_event;
+            // iterate thru fatality file
+            s.year[year_i].events[index].f->event_id = e_id;
+            s.year[year_i].events[index].f->fatality_id = f_id;
+            getline(stream, field, ',');
+            if (field == "") s.year[year_i].events[index].f->fatality_type = '0';
+            s.year[year_i].events[index].f->fatality_type = field[0];
+            getline(stream, field, ',');
+            strcpy(s.year[year_i].events[index].f->fatality_date, field.c_str());
+            getline(stream, field, ',');
+            if (field == "") s.year[year_i].events[index].f->fatality_age = 0;
+            else s.year[year_i].events[index].f->fatality_age = stoi(field);
+            getline(stream, field, ',');
+            if (field == "" ) s.year[year_i].events[index].f->fatality_sex = '0';
+            else s.year[year_i].events[index].f->fatality_sex = field[0];
+            getline(stream, field, ',');
+            strcpy(s.year[year_i].events[index].f->fatality_location, field.c_str());
+        stream.clear();
     }
 }
 // test if inputted number is prime
