@@ -20,7 +20,7 @@ bool testPrime(int);
 void addToHash(int, int);
 void hashFatality(int);
 void processQuery();
-void printEvent(int, int);
+bool printEvent(int, int);
 
 using namespace std;
 
@@ -101,7 +101,7 @@ void initStormEvents(int i_year) {
         getline(stream, field, ',');
         strcpy(s.year[i_year].events[i].state, field.c_str());
         getline(stream, field, ',');
-        s.year[i_year].events->year = stoi(field);
+        s.year[i_year].events[i].year = stoi(field);
         getline(stream, field, ',');
         strcpy(s.year[i_year].events[i].month_name, field.c_str());
         getline(stream, field, ',');
@@ -251,25 +251,28 @@ void processQuery() {
     }
     query.pop_back(); // remove last letter of string
     value = stoi(digit+s_value); // event id in this case
+    int index = value % s.hash_size;
+    hash_table_entry* hash = s.hash[index];
+    bool found_id = false; bool found_fat = false;
+    // find event query
     if (query == "find event") {
-        int index = value % s.hash_size;
-        hash_table_entry* hash = s.hash[index]; bool found_id = false; bool found_fat = false;
         // check through hash index for event id
         while (hash != NULL) {
             if (hash->event_id == value) {
                 found_id = true;
-                printEvent(s.hash[index]->year, s.hash[index]->event_index);
+                break;
             }
             else hash = hash->next;
         }
+        if (found_id) found_fat = printEvent(hash->year, hash->event_index);
         // if event id was not found
-        if (!found_id) cout << "Storm event <" << value << "> not found.\n";
+        else if (!found_id) cout << "Storm event <" << value << "> not found.\n";
         // if no fatalities were found
         else if (!found_fat) cout << "No fatalities\n";
     }
 }
-void printEvent(int year, int storm_i) {
-    int year_i;
+bool printEvent(int year, int storm_i) {
+    int year_i = 0;
     // search for correct year index
     for (int i = 0; i < s.year->num_of_storms; i++) {
         if (s.year[i].year == year) {
@@ -285,7 +288,7 @@ void printEvent(int year, int storm_i) {
     cout << "Month: " << s.year[year_i].events[storm_i].month_name << "\n";
     cout << "Event-type: " << s.year[year_i].events[storm_i].event_type << "\n";
     cout << "CZ-Type: " << s.year[year_i].events[storm_i].cz_type << "\n";
-    cout << "CZ-name: " << s.year[year_i].events[storm_i].event_id << "\n";
+    cout << "CZ-name: " << s.year[year_i].events[storm_i].cz_name << "\n";
     cout << "Injuries-direct: " << s.year[year_i].events[storm_i].injuries_direct << "\n";
     cout << "Injuries-indirect: " << s.year[year_i].events[storm_i].injuries_indirect << "\n";
     cout << "Deaths-direct: " << s.year[year_i].events[storm_i].deaths_direct << "\n";
@@ -293,6 +296,29 @@ void printEvent(int year, int storm_i) {
     cout << "Damage-property: " << s.year[year_i].events[storm_i].damage_property << "\n";
     cout << "Damage-crops: " << s.year[year_i].events[storm_i].damage_crops << "\n";
     cout << "TOR F-scale: " << s.year[year_i].events[storm_i].tor_f_scale << "\n";
+    // find fatality
+    bool found_fat = false;
+    fatality_event* fat_event = s.year[year_i].events[storm_i].f;
+    // print out all fatality events in linked list
+    while (fat_event != NULL) {
+        found_fat = true;
+        cout << "Fatality_ID: " << fat_event->fatality_id << "\n";
+        if (fat_event->fatality_type == '0') cout << "Fatality-type: Not Available\n";
+        else cout << "Fatality-type: " << fat_event->fatality_type << "\n";
+        if (fat_event->fatality_date[0] == '\0') cout << "Fatality-date: Not Available\n";
+        else cout << "Fatality-date: " << fat_event->fatality_date << "\n";
+        if (fat_event->fatality_age == 0) cout << "Fatality-age: Not Available\n";
+        else cout << "Fatality-age " << fat_event->fatality_age << "\n";
+        if (fat_event->fatality_sex == '0') cout << "Fatality-sex: Not Available\n";
+        else cout << "Fatality-sex " << fat_event->fatality_sex << "\n";
+        if (fat_event->fatality_location[0] == '\0') cout << "Fatality-location: Not Available\n";
+        else cout << "Fatality-location " << fat_event->fatality_location << "\n";
+        
+        // move to next pointer
+        fat_event = fat_event->next;
+    }
+    
+    return found_fat;
 }
 // test if inputted number is prime
 bool testPrime( int val )
