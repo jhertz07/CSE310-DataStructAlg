@@ -19,6 +19,8 @@ void setHashSize(int);
 bool testPrime(int);
 void addToHash(int, int);
 void hashFatality(int);
+void processQuery();
+void printEvent(int, int);
 
 using namespace std;
 
@@ -30,11 +32,13 @@ public:
     //declare dyanmic arrays
     annual_storms* year;
     hash_table_entry** hash; // hash is an array of pointers to hash_table_entry
+    int* chain_l; // stores the number of chains in hash ie for index 0, number of indexes where l=0
     int hash_size;
     
 };
 
 storm s; // call constructor as a global variable
+
 int main(int argc, const char * argv[]) {
     int num_of_years; // globally define number of years
     // get num of years thru command line arg
@@ -46,7 +50,6 @@ int main(int argc, const char * argv[]) {
     // initialize each year of storms
     for (int i = 0; i < num_of_years; i++) {
         initStormYear(atoi(argv[i+2]), i); // match year to arg input
-        
     }
     // set up hash
     setHashSize(num_of_years);
@@ -58,7 +61,16 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < num_of_years; i++) {
         hashFatality(i);
     }
+    // Process Queries
+    int qnum; string nonsense;
+    cout << "Process Queries:\n";
+    cin >> qnum;
+    getline(cin, nonsense); // for some reason I need to clear cin
+    for (int i = 0; i < qnum; i++) {
+        processQuery();
+    }
 }
+
 // initialize each year
 void initStormYear(int year, int i) {
     s.year[i].year = year; // set year
@@ -224,6 +236,63 @@ void hashFatality(int year_i) {
             strcpy(s.year[year_i].events[index].f->fatality_location, field.c_str());
         stream.clear();
     }
+}
+void processQuery() {
+    string query; string s_value; string digit; int value; istringstream stream;
+    getline(cin, query);
+    stream.str(query);
+    for (int i = 0; i < query.size()-1; i++) {
+        if (isdigit(query[i])) {
+            digit = query[i]; // keep delimiter to append after
+            getline(stream, query, query[i]);
+            getline(stream, s_value);
+            break;
+        }
+    }
+    query.pop_back(); // remove last letter of string
+    value = stoi(digit+s_value); // event id in this case
+    if (query == "find event") {
+        int index = value % s.hash_size;
+        hash_table_entry* hash = s.hash[index]; bool found_id = false; bool found_fat = false;
+        // check through hash index for event id
+        while (hash != NULL) {
+            if (hash->event_id == value) {
+                found_id = true;
+                printEvent(s.hash[index]->year, s.hash[index]->event_index);
+            }
+            else hash = hash->next;
+        }
+        // if event id was not found
+        if (!found_id) cout << "Storm event <" << value << "> not found.\n";
+        // if no fatalities were found
+        else if (!found_fat) cout << "No fatalities\n";
+    }
+}
+void printEvent(int year, int storm_i) {
+    int year_i;
+    // search for correct year index
+    for (int i = 0; i < s.year->num_of_storms; i++) {
+        if (s.year[i].year == year) {
+            year_i = i;
+            break;
+        }
+    }
+    // begin printing storm info
+    cout << "STORM INFO:\n";
+    cout << "Event_ID: " << s.year[year_i].events[storm_i].event_id << "\n";
+    cout << "State: " << s.year[year_i].events[storm_i].state << "\n";
+    cout << "Year: " << s.year[year_i].events[storm_i].year << "\n";
+    cout << "Month: " << s.year[year_i].events[storm_i].month_name << "\n";
+    cout << "Event-type: " << s.year[year_i].events[storm_i].event_type << "\n";
+    cout << "CZ-Type: " << s.year[year_i].events[storm_i].cz_type << "\n";
+    cout << "CZ-name: " << s.year[year_i].events[storm_i].event_id << "\n";
+    cout << "Injuries-direct: " << s.year[year_i].events[storm_i].injuries_direct << "\n";
+    cout << "Injuries-indirect: " << s.year[year_i].events[storm_i].injuries_indirect << "\n";
+    cout << "Deaths-direct: " << s.year[year_i].events[storm_i].deaths_direct << "\n";
+    cout << "Deaths-indirect: " << s.year[year_i].events[storm_i].deaths_indirect << "\n";
+    cout << "Damage-property: " << s.year[year_i].events[storm_i].damage_property << "\n";
+    cout << "Damage-crops: " << s.year[year_i].events[storm_i].damage_crops << "\n";
+    cout << "TOR F-scale: " << s.year[year_i].events[storm_i].tor_f_scale << "\n";
 }
 // test if inputted number is prime
 bool testPrime( int val )
