@@ -55,6 +55,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "findChainLength():storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(hash_table_entry*(&amp;)[991])*s.hash">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "printEvent(int, int):storm.cpp">
+      </ContextState>
+      <ContextState
          contextName = "setHashSize(int):storm.cpp">
       </ContextState>
    </ContextStates>

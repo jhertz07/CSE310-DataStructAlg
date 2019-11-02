@@ -11,6 +11,8 @@
 #include <sstream>
 #include <string>
 #include <math.h>
+#include <stdio.h>
+#include <cstring>
 
 void initStormYear(int, int);
 void initStormEvents(int);
@@ -21,6 +23,7 @@ void addToHash(int, int);
 void hashFatality(int);
 void processQuery();
 bool printEvent(int, int);
+void findChainLength();
 
 using namespace std;
 
@@ -32,7 +35,7 @@ public:
     //declare dyanmic arrays
     annual_storms* year;
     hash_table_entry** hash; // hash is an array of pointers to hash_table_entry
-    int* chain_l; // stores the number of chains in hash ie for index 0, number of indexes where l=0
+    int chain_l[100]; // stores the number of chains in hash ie for index 0, number of indexes where l=0
     int hash_size;
     
 };
@@ -69,6 +72,7 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < qnum; i++) {
         processQuery();
     }
+    findChainLength();
 }
 
 // initialize each year
@@ -268,7 +272,7 @@ void processQuery() {
         // if event id was not found
         else if (!found_id) cout << "Storm event <" << value << "> not found.\n";
         // if no fatalities were found
-        else if (!found_fat) cout << "No fatalities\n";
+        if (!found_fat) cout << "No fatalities\n";
     }
 }
 bool printEvent(int year, int storm_i) {
@@ -319,6 +323,32 @@ bool printEvent(int year, int storm_i) {
     }
     
     return found_fat;
+}
+void findChainLength() {
+    // initialize chain array to -1
+    for (int i = 0; i < 100; i++) {
+        s.chain_l[i] = -1;
+    }
+    int size = 0; hash_table_entry* hash;
+    for (int i = 0; i < s.hash_size; i++) {
+        size = 0;
+        hash = s.hash[i];
+        while (hash != NULL) {
+            size++;
+            hash = hash->next;
+        }
+        if (s.chain_l[size] == -1) s.chain_l[size] = 1;
+        else s.chain_l[size] = s.chain_l[size] + 1;
+    }
+    cout << "Chain length: \n";
+    for (int i = 0; i < 100; i++) {
+        if (s.chain_l[i] > -1) {
+            cout << i << ": " << s.chain_l[i] << "\n";
+        }
+    }
+    float l_factor;
+    l_factor = (s.hash_size - s.chain_l[0]) / (float)(s.hash_size);
+    cout << "Load factor: " << l_factor << "\n";
 }
 // test if inputted number is prime
 bool testPrime( int val )
