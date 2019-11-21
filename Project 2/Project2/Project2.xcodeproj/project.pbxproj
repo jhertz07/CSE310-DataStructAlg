@@ -23,6 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		456982BB2385CFC9006D8294 /* details-2006.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = "details-2006.csv"; sourceTree = "<group>"; };
+		456982BC2385CFC9006D8294 /* fatalities-2006.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = "fatalities-2006.csv"; sourceTree = "<group>"; };
 		45E48E2A235902760054997A /* Project2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project2; sourceTree = BUILT_PRODUCTS_DIR; };
 		45E48E2D235902760054997A /* storm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = storm.cpp; sourceTree = "<group>"; };
 		45E48E34235902D00054997A /* defn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defn.h; sourceTree = "<group>"; };
@@ -32,6 +34,16 @@
 		45E48E3A235912EA0054997A /* fatalities-1950.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = "fatalities-1950.csv"; sourceTree = "<group>"; };
 		45E48E3B235912EA0054997A /* details-1952.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = "details-1952.csv"; sourceTree = "<group>"; };
 		45E48E3C235912EA0054997A /* fatalities-1951.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = "fatalities-1951.csv"; sourceTree = "<group>"; };
+		45EE9848236E3C5200EA706E /* fatalities-0001.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fatalities-0001.csv"; sourceTree = "<group>"; };
+		45EE9849236E3C5200EA706E /* fatalities-0002.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fatalities-0002.csv"; sourceTree = "<group>"; };
+		45EE984A236E3C5200EA706E /* details-0002.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "details-0002.csv"; sourceTree = "<group>"; };
+		45EE984B236E3C5200EA706E /* details-0001.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "details-0001.csv"; sourceTree = "<group>"; };
+		45EE984E236FABA800EA706E /* details-1982.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "details-1982.csv"; sourceTree = "<group>"; };
+		45EE984F236FABA800EA706E /* details-1981.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "details-1981.csv"; sourceTree = "<group>"; };
+		45EE9850236FABA800EA706E /* fatalities-1982.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fatalities-1982.csv"; sourceTree = "<group>"; };
+		45EE9851236FABA800EA706E /* details-1980.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "details-1980.csv"; sourceTree = "<group>"; };
+		45EE9852236FABA800EA706E /* fatalities-1980.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fatalities-1980.csv"; sourceTree = "<group>"; };
+		45EE9853236FABA800EA706E /* fatalities-1981.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fatalities-1981.csv"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +76,18 @@
 		45E48E2C235902760054997A /* Project2 */ = {
 			isa = PBXGroup;
 			children = (
+				45EE9851236FABA800EA706E /* details-1980.csv */,
+				45EE984F236FABA800EA706E /* details-1981.csv */,
+				45EE984E236FABA800EA706E /* details-1982.csv */,
+				45EE9852236FABA800EA706E /* fatalities-1980.csv */,
+				45EE9853236FABA800EA706E /* fatalities-1981.csv */,
+				45EE9850236FABA800EA706E /* fatalities-1982.csv */,
+				45EE984B236E3C5200EA706E /* details-0001.csv */,
+				45EE984A236E3C5200EA706E /* details-0002.csv */,
+				45EE9848236E3C5200EA706E /* fatalities-0001.csv */,
+				45EE9849236E3C5200EA706E /* fatalities-0002.csv */,
+				456982BB2385CFC9006D8294 /* details-2006.csv */,
+				456982BC2385CFC9006D8294 /* fatalities-2006.csv */,
 				45E48E2D235902760054997A /* storm.cpp */,
 				45E48E34235902D00054997A /* defn.h */,
 				45E48E372359102D0054997A /* details-1950.csv */,

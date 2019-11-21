@@ -3,8 +3,22 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "processQuery(int):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(storm_event(&amp;)[20])*max_events">
+            </PersistentString>
+            <PersistentString
+               value = "(storm_event(&amp;)[223])*s.heap">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "main:storm.cpp">
          <PersistentStrings>
+            <PersistentString
+               value = "(char&amp;[3])*argv">
+            </PersistentString>
             <PersistentString
                value = "(hash_table_entry*(&amp;)[1000]) *s.hash">
             </PersistentString>
@@ -14,34 +28,26 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "initStormEvents(int):storm.cpp">
+         contextName = "maxHeapify(int, int, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;):storm.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "(storm_event(&amp;)[223]) *s.year.events">
+               value = "(storm_event(&amp;)[223])*s.heap">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "processQuery():storm.cpp">
-         <PersistentStrings>
-            <PersistentString
-               value = "(hash_table_entry*(&amp;)[991])*s.hash">
-            </PersistentString>
-            <PersistentString
-               value = "(storm_event(&amp;)[223])*s.year.events">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "addToHash(int, int):storm.cpp">
-         <PersistentStrings>
-            <PersistentString
-               value = "(hash_table_entry*(&amp;)[991]) *s.hash">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "inorder(bst*, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;):storm.cpp">
       </ContextState>
       <ContextState
          contextName = "openStream(int):storm.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "printRange(bst*):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(storm_event(&amp;)[223])*s.year">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "hashFatality(int):storm.cpp">
@@ -55,6 +61,37 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "addToHash(int, int):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(hash_table_entry*(&amp;)[991]) *s.hash">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "printEvent(int, int):storm.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "processQuery():storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(storm_event(&amp;)[223])*s.year.events">
+            </PersistentString>
+            <PersistentString
+               value = "(storm_event(&amp;)[223])*s.heap">
+            </PersistentString>
+            <PersistentString
+               value = "(hash_table_entry*(&amp;)[991])*s.hash">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "initStormYear(int, int):storm.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "setHashSize(int):storm.cpp">
+      </ContextState>
+      <ContextState
          contextName = "findChainLength():storm.cpp">
          <PersistentStrings>
             <PersistentString
@@ -63,10 +100,12 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "printEvent(int, int):storm.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "setHashSize(int):storm.cpp">
+         contextName = "initStormEvents(int):storm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(storm_event(&amp;)[223]) *s.year.events">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>
