@@ -16,6 +16,8 @@ void buildGraph(int, int);
 void getMedians(); // and sum
 bool* isEdge(int, int, int, int);
 void addEdge(int, int, int, int, struct adjList[63][63]);
+void degreeDistribution(struct adjList[63][63]);
+void DFS(struct adjList[63][63]);
 
 // global variables which will be used throughout the program
 float cells[63][63][832];
@@ -79,6 +81,9 @@ int main(int argc, const char * argv[]) {
     getMedians();
     // build graph by comparing nodes, starting at (0,0)
     buildGraph(0, 0);
+    // print degrees for given graph
+    cout << "\nDegree Distribution for 0.95\n--------------------------\n";
+    degreeDistribution(graph950);
 
     return 0;
 }
@@ -216,4 +221,41 @@ void getMedians() {
         }
     }
 }
-// 17234
+// print degree distribution for given graph
+void degreeDistribution(struct adjList graph[63][63]) {
+    // create array to store degrees and initialize to 0
+    int degrees[3968];
+    for (int i = 0; i < 3968; i++) {
+        degrees[i] = 0;
+    }
+    adjNode* node = nullptr; int count;
+    // iterate thru graph
+    for (int x = 0; x < 63; x++) {
+        for (int y = 0; y < 63; y++) {
+            count = 0; // reset count
+            node = graph[x][y].head; // assign node to head
+            // iterate thru linked list and count number of edges
+            while (node != nullptr) {
+                count++;
+                node = node->next;
+            }
+            // increment index of degrees
+            degrees[count]++;
+        }
+    }
+    // subtract land nodes from degree 0, as we don't want these included
+    degrees[0] -= land_nodes;
+    // find highest degree index
+    int highest = 0;
+    for (int i = 0; i < 3968; i++) {
+        if (degrees[i] > 0) highest = i;
+    }
+    // print degrees from 0 to highest
+    for (int i = 0; i <= highest; i++) {
+        cout << "Degree " << i << ":  " << degrees[i] << "\n";
+    }
+}
+// recursive depth first search
+void DFS(struct adjList[63][63]) {
+    
+}
