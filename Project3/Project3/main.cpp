@@ -13,16 +13,21 @@
 #include "Graph.h"
 
 void buildGraph(int, int);
-bool isEdge(int, int, int, int, float);
-void addEdge(int, int, int, int);
+void getMedians(); // and sum
+bool* isEdge(int, int, int, int);
+void addEdge(int, int, int, int, struct adjList[63][63]);
 
 // global variables which will be used throughout the program
 float cells[63][63][832];
 const int week_size = 3969; // total cells in a week
 const int land_nodes = 783; // total number of land nodes
 const int total_weeks = 832; // total weeks*years measured
-struct adjList graph[63][63]; // adjacency list represnting entire graph
-struct adjList compared[63][63]; //adjacency list keeping track of nodes that have been compared
+struct adjList graph950[63][63]; // adjacency list represnting entire graph
+struct adjList graph925[63][63];
+struct adjList graph900[63][63];
+float median[63][63]; // median value for each cell
+float sum[63][63]; // Sxx value for each cell
+int edgeNum; // used for testing
 
 int main(int argc, const char * argv[]) {
     
@@ -65,74 +70,98 @@ int main(int argc, const char * argv[]) {
     // set graph to all null
     for (int i = 0; i < 63; i++) {
         for (int k = 0; k < 63; k++) {
-            graph[i][k].head = nullptr;
-            compared[i][k].head = nullptr;
+            graph950[i][k].head = nullptr;
+            graph925[i][k].head = nullptr;
+            graph900[i][k].head = nullptr;
         }
     }
-    // compare nodes starting at (0,0);
+    // get medians for time efficiency
+    getMedians();
+    // build graph by comparing nodes, starting at (0,0)
     buildGraph(0, 0);
-//    // check for how many edges there are (testing purposes)
-//    int edgeNum = 0;
-//    for (int x1 = 0; x1 < 63; x1++) {
-//        cout << "x1: " << x1 << "\n";
-//        for (int y1 = 0; y1 < 63; y1++) {
-//            cout << "y1: " << y1 << "\n";
-//            for (int x2 = 0; x2 < 63; x2++) {
-//                cout << "x2: " << x2 << "\n";
-//                for (int y2 = 0; y2 < 63; y2++) {
-//                    cout << "y2: " << y2 << "\n";
-//                    // first check if nodes have already been compared
-//                    if (hasCompared(x1, y1, x2, y2));
-//                    // if not compared, addCompared and check if edge exists
-//                    else {
-//                        addCompared(x1, y1, x2, y2);
-//                        if (isEdge(x1, y1, x2, y2, 0.95)) {
-//                            addEdge(x1, y1, x2, y2);
-//                            edgeNum++;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-    cout << edgeNum;
+
     return 0;
 }
+// recursive algorithm to build graph by comparing nodes to each other (combinations)
+void buildGraph(int x1, int y1) {
+    cout << x1 << ", " << y1 << "\n"; // output x1,y1 for testing purposes
+    int sx2, sy2;
+    // base case, if end of nodes is reached
+    if (x1 == 62 && y1 == 62) return;
+
+    // set initial x2, y2 values to be the next cell after x1, y1
+    if (x1 == 62) {
+        sx2 = 0;
+        sy2 = y1 + 1;
+    }
+    else {
+        sx2 = x1 + 1;
+        sy2 = y1;
+    }
+    // loop thru nodes starting at sx2, sy2
+    int x2 = sx2; int y2 = sy2;
+    do {
+        // check if edge exists
+        bool* edge = isEdge(x1, y1, x2, y2);
+        // add edges depending on isEdge output
+        if (edge[0]) addEdge(x1, y1, x2, y2, graph950);
+        if (edge[1]) addEdge(x1, y1, x2, y2, graph925);
+        if (edge[2]) addEdge(x1, y1, x2, y2, graph900);
+        // increment x2, y2
+        if (x2 == 62) {
+            x2 = 0;
+            y2++;
+        }
+        else x2++;
+        
+    }
+    // break loop at (0,63), which is out of bounds (last node is (62, 62))
+    while(y2 != 63);
+    
+    //increment x1, y1
+    if (x1 == 62) {
+        x1 = 0;
+        y1++;
+    }
+    else x1++;
+    //recursively call
+    buildGraph(x1, y1);
+}
 // check whether two vertices, over a period of time (n), are over given threshold (.95, .925, or .90)
-bool isEdge(int x1, int y1, int x2, int y2, float threshold) {
+bool* isEdge(int x1, int y1, int x2, int y2) {
+    // 0 = 0.95, 1 = 0.925, 2 = 0.9
+    bool* edge = new bool[3];
+    edge[0] = false; edge[1] = false; edge[2] = false;
+    
     int size = total_weeks; // go thru all weeks
-    float median_1 = 0; float median_2 = 0;
-    float sum_1 = 0; float sum_2 = 0; float sum_1_2 = 0;
+    float sum_1_2 = 0;
     
     // check if land cell, dont do calculation if so
-    if (cells[x1][y1][0] == 168 || cells[x2][y2][0] == 168) return false;
+    if (cells[x1][y1][0] == 168 || cells[x2][y2][0] == 168) return edge;
     
-    // subtract const land_nodes from median
-    // iterate thru data sets to find median
-    for (int i = 0; i < size; i++) {
-        median_1 += cells[x1][y1][i];
-        median_2 += cells[x2][y2][i];
-    }
-    // divide sum by size to get median
-    median_1 = median_1/size;
-    median_2 = median_2/size;
+    // get median values
+    float median_1 = median[x1][y1];
+    float median_2 = median[x2][y2];
+    // get sum values
+    float sum_1 = sum[x1][y1];
+    float sum_2 = sum[x2][y2];
     
-    // sum up 1, 2, and 1_2
+    // sum up 1_2
     for (int i = 0; i < size; i++) {
-        sum_1 += pow((cells[x1][y1][i] - median_1), 2);
-        sum_2 += pow((cells[x2][y2][i] - median_2), 2);
         sum_1_2 += (cells[x1][y1][i] - median_1) * (cells[x2][y2][i] - median_2);
     }
     // calculate total using 'r' formula and compare to threshold
     float total = sum_1_2 / sqrt(sum_1 * sum_2);
     total = abs(total);
-    if (total >= threshold) { // must be greater than threshold
-        return true;
-    }
-    else return false;
+    
+    // check total against each threshold (must be greater or equal)
+    if (total >= 0.95) edge[0] = true;
+    if (total >= 0.925) edge[1] = true;
+    if (total >= 0.9) edge[2] = true;
+    return edge;
 }
 // add edge to graph/adjacency list
-void addEdge(int x1, int y1, int x2, int y2) {
+void addEdge(int x1, int y1, int x2, int y2, struct adjList graph[63][63]) {
     // add edge from 1->2
     struct adjNode* temp_1 = new struct adjNode; // create new memory for node
     temp_1->x = x2;
@@ -160,30 +189,31 @@ void addEdge(int x1, int y1, int x2, int y2) {
         graph[x2][y2].head = temp_2;
     }
 }
-//void addCompared(int x1, int y1, int x2, int y2) {
-//    // create new node with x2, y2 values
-//    struct adjNode *temp = new struct adjNode;
-//    temp->x = x2;
-//    temp->y = y2;
-//    // if no head, make head
-//    if (compared[x1][y1].head == nullptr) {
-//        temp->next = nullptr;
-//        compared[x1][y1].head = temp;
-//    }
-//    // otherwise replace as new head
-//    else {
-//        temp->next = compared[x1][y1].head;
-//        compared[x1][y1].head = temp;
-//    }
-//}
-//bool hasCompared(int x1, int y1, int x2, int y2) {
-//    struct adjNode *temp = compared[x2][y2].head; // create temp pointer
-//    // iterate thru list to see if node exists
-//    while (temp != nullptr) {
-//        // if a match is found return true
-//        if ((temp->x == x1) && (temp->y == y1)) return true;
-//        temp = temp->next;
-//    }
-//    // if hit nullptr, has not been compared yet
-//    return false;
-//}
+void getMedians() {
+    float med, s;
+    // iterate thru all cells
+    for (int x = 0; x < 63; x++) {
+        for (int y = 0; y < 63; y++) {
+            med = 0; // reset median
+            if (cells[x][y][0] == 168) med = -1; // check if land cell
+            else for (int w = 0; w < total_weeks; w++) {
+                med += cells[x][y][w];
+            }
+            if (med == -1);
+            else med = med/total_weeks;
+            median[x][y] = med;
+        }
+    }
+    // now calculate sum
+    for (int x = 0; x < 63; x++) {
+        for (int y = 0; y < 63; y++) {
+            s = 0; // reset sum
+            if (cells[x][y][0] == 168) s = -1; // check if land cell
+            else for (int w = 0; w < total_weeks; w++) {
+                s += pow(cells[x][y][w] - median[x][y], 2);
+            }
+            sum[x][y] = s;
+        }
+    }
+}
+// 17234
