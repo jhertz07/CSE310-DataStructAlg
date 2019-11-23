@@ -18,6 +18,7 @@ bool* isEdge(int, int, int, int);
 void addEdge(int, int, int, int, struct adjList[63][63]);
 void degreeDistribution(struct adjList[63][63]);
 void DFS(struct adjList[63][63]);
+void DFSRecur(struct adjList[63][63], bool[63][63], int, int);
 
 // global variables which will be used throughout the program
 float cells[63][63][832];
@@ -29,7 +30,7 @@ struct adjList graph925[63][63];
 struct adjList graph900[63][63];
 float median[63][63]; // median value for each cell
 float sum[63][63]; // Sxx value for each cell
-int edgeNum; // used for testing
+int comp_size;
 
 int main(int argc, const char * argv[]) {
     
@@ -84,6 +85,8 @@ int main(int argc, const char * argv[]) {
     // print degrees for given graph
     cout << "\nDegree Distribution for 0.95\n--------------------------\n";
     degreeDistribution(graph950);
+    // print component sizes
+    DFS(graph950);
 
     return 0;
 }
@@ -255,7 +258,66 @@ void degreeDistribution(struct adjList graph[63][63]) {
         cout << "Degree " << i << ":  " << degrees[i] << "\n";
     }
 }
-// recursive depth first search
-void DFS(struct adjList[63][63]) {
-    
+// DFS function to set up and call on DFSRecur
+void DFS(struct adjList graph[63][63]) {
+    // keep track of visited nodes
+    bool visited[63][63];
+    // keep track of component sizes
+    int components[3969];
+    for (int i = 0; i < 3968; i++) { // set all to 0
+        components[i] = 0;
+    }
+    // set visited to all false
+    for (int x = 0; x < 63; x++) {
+        for (int y = 0; y < 63; y++) {
+            visited[x][y] = false;
+        }
+    }
+    // iterate thru graph to catch all componenets
+    for (int x = 0; x < 63; x++) {
+        for (int y = 0; y < 63; y++) {
+            comp_size = 0;
+            // if visited == false and not a land node, perform DFS recur (new componenet)
+            if (visited[x][y] == false && graph[x][y].head != nullptr) {
+                DFSRecur(graph, visited, x, y);
+                comp_size++;
+            }
+            if (visited[x][y] == false) {
+                visited[x][y] = true;
+                comp_size++;
+            }
+            components[comp_size]++;
+        }
+    }
+    // subtract land nodes
+    components[1] -= land_nodes;
+    // print component sizes
+    for (int i = 1; i < 3968; i++) {
+        if (components[i] > 0) {
+            cout << "Comp size: " << i << ":  " << components[i] << "\n";
+        }
+    }
 }
+// Recursive function that performs the DFS
+void DFSRecur(struct adjList graph[63][63], bool visited[63][63], int x, int y) {
+    // mark current node as visited and increment comp_size
+    visited[x][y] = true;
+    // set temp node to head
+    struct adjNode* node = graph[x][y].head;
+    // first check head
+    if (node != nullptr) {
+        if (visited[node->x][node->y] == false) {
+            DFSRecur(graph, visited, node->x, node->y);
+            comp_size++;
+        }
+        // then iterate thru linked list
+        while(node->next != nullptr) {
+            node = node->next;
+            if (visited[node->x][node->y] == false) {
+                DFSRecur(graph, visited, node->x, node->y);
+                comp_size++;
+            }
+        }
+    }
+}
+// maybe I need to go to the (x,y) coordinate in the graph? And then set the node the head of that? And keep doing that ? And then do node->next after?
