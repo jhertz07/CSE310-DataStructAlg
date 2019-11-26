@@ -85,14 +85,23 @@ int main(int argc, const char * argv[]) {
     // print degrees for given graph
     cout << "\nDegree Distribution for 0.95\n--------------------------\n";
     degreeDistribution(graph950);
+    cout << "\nDegree Distribution for 0.925\n--------------------------\n";
+    degreeDistribution(graph925);
+    cout << "\nDegree Distribution for 0.9\n--------------------------\n";
+    degreeDistribution(graph900);
     // print component sizes
+    cout << "\nComponent Size for 0.95\n--------------------------\n";
     DFS(graph950);
+    cout << "\nComponent Size for 0.925\n--------------------------\n";
+    DFS(graph925);
+    cout << "\nComponent Size for 0.9\n--------------------------\n";
+    DFS(graph900);
 
     return 0;
 }
 // recursive algorithm to build graph by comparing nodes to each other (combinations)
 void buildGraph(int x1, int y1) {
-    cout << x1 << ", " << y1 << "\n"; // output x1,y1 for testing purposes
+    
     int sx2, sy2;
     // base case, if end of nodes is reached
     if (x1 == 62 && y1 == 62) return;
@@ -255,7 +264,12 @@ void degreeDistribution(struct adjList graph[63][63]) {
     }
     // print degrees from 0 to highest
     for (int i = 0; i <= highest; i++) {
-        cout << "Degree " << i << ":  " << degrees[i] << "\n";
+        cout << "Degree " << i << ":  ";
+        int hist = degrees[i]/5;
+        for (int k = 0; k < hist; k++) {
+            cout << "* ";
+        }
+        cout << "(" << degrees[i] << ")\n";
     }
 }
 // DFS function to set up and call on DFSRecur
@@ -294,7 +308,7 @@ void DFS(struct adjList graph[63][63]) {
     // print component sizes
     for (int i = 1; i < 3968; i++) {
         if (components[i] > 0) {
-            cout << "Comp size: " << i << ":  " << components[i] << "\n";
+            cout << "Comp size " << i << ":  " << components[i] << "\n";
         }
     }
 }
