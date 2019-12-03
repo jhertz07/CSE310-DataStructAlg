@@ -19,10 +19,12 @@ void addEdge(int, int, int, int, struct adjList[63][63]);
 void degreeDistribution(struct adjList[63][63]);
 void DFS(struct adjList[63][63]);
 void DFSRecur(struct adjList[63][63], bool[63][63], int, int);
+float clusterCoef(struct adjList[63][63], int, int);
+float meanCluster(struct adjList[63][63]);
 
 // global variables which will be used throughout the program
 float cells[63][63][832];
-const int week_size = 3969; // total cells in a week
+const int total_nodes = 3969; // total cells in a week
 const int land_nodes = 783; // total number of land nodes
 const int total_weeks = 832; // total weeks*years measured
 struct adjList graph950[63][63]; // adjacency list represnting entire graph
@@ -49,7 +51,7 @@ int main(int argc, const char * argv[]) {
         inputFile.open( file, ios::in | ios::binary );
         
         float dataIn = 0;
-        for (int i = 0; i <= week_size; i++) {
+        for (int i = 0; i <= total_nodes; i++) {
             inputFile.read( (char*)&dataIn, 4 ); // Read 4 bytes of data
             numList[i] = dataIn;
         }
@@ -96,6 +98,11 @@ int main(int argc, const char * argv[]) {
     DFS(graph925);
     cout << "\nComponent Size for 0.9\n--------------------------\n";
     DFS(graph900);
+    
+    cout << "\nCluster Coefficients\n--------------------------\n";
+    cout << "0.95: " << meanCluster(graph950);
+    cout << "\n0.925: " << meanCluster(graph925);
+    cout << "\n0.9: " << meanCluster(graph900) << "\n";
 
     return 0;
 }
@@ -334,4 +341,48 @@ void DFSRecur(struct adjList graph[63][63], bool visited[63][63], int x, int y) 
         }
     }
 }
-// maybe I need to go to the (x,y) coordinate in the graph? And then set the node the head of that? And keep doing that ? And then do node->next after?
+// calculate clustering coefficient for a vertex
+// don't include the original vertex in any e or v calculations
+float clusterCoef(struct adjList graph[63][63], int x, int y) {
+    float coef; int edges = 0; int vertices = 0;
+    struct adjNode* node; // node that iterates thru adjList
+    struct adjNode* orig; // node used to compare orig adjList
+    struct adjNode* neighbor; // node that iterates thru other adjLists
+    // loop thru all element in adjList
+    node = graph[x][y].head;
+    while (node != nullptr) {
+        neighbor = graph[node->x][node->y].head;
+        // loop through neighbor adjList
+        while (neighbor != nullptr) {
+            orig = graph[x][y].head; // point to start of orig adjList
+            // check if each node is connected to any elements from original adjList
+            while (orig != nullptr) {
+                // if edge exists, increment edge and break loop
+                if (neighbor->x == orig->x && neighbor->y == orig->y) {
+                    edges++;
+                    break;
+                }
+                else orig = orig->next;
+            }
+            neighbor = neighbor->next;
+        }
+        vertices++; // count number of vertices in orig adjList
+        node = node->next;
+    }
+    if (vertices == 0 || vertices == 1) return 0;
+    else {
+        coef = edges/2; // divide by 2 to remove duplicate edges
+        coef = (coef*2) / (vertices * (vertices-1));
+        return coef;
+    }
+}
+// utility function that calls clusterCoef and calculates the mean for a graph
+float meanCluster(struct adjList graph[63][63]) {
+    float total = 0;
+    for (int x = 0; x < 63; x++) {
+        for (int y = 0; y < 63; y++) {
+            total += clusterCoef(graph, x, y);
+        }
+    }
+    return total / (total_nodes - land_nodes); // calculate mean mean
+}
