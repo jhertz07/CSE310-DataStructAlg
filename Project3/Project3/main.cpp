@@ -11,6 +11,7 @@
 #include <string>
 #include <cmath>
 #include "Graph.h"
+#include <limits.h>
 
 void buildGraph(int, int);
 void getMedians(); // and sum
@@ -21,6 +22,7 @@ void DFS(struct adjList[63][63]);
 void DFSRecur(struct adjList[63][63], bool[63][63], int, int);
 float clusterCoef(struct adjList[63][63], int, int);
 float meanCluster(struct adjList[63][63]);
+//float shortestPath(int** matrix);
 
 // global variables which will be used throughout the program
 float cells[63][63][832];
@@ -30,15 +32,18 @@ const int total_weeks = 832; // total weeks*years measured
 struct adjList graph950[63][63]; // adjacency list represnting entire graph
 struct adjList graph925[63][63];
 struct adjList graph900[63][63];
+//int** matrix950; // adjacency matrix representing entire graph
+//int** matrix925;
+//int** matrix900;
 float median[63][63]; // median value for each cell
 float sum[63][63]; // Sxx value for each cell
 int comp_size;
 
 int main(int argc, const char * argv[]) {
-    
+
     // 1D array as a list of all values
     float numList[3969];
-    
+
     // read in bit file
     int week = 1; int year = 1990; string file;
     ifstream inputFile;
@@ -49,7 +54,7 @@ int main(int argc, const char * argv[]) {
         if (week < 10) file = to_string(year)+"/Beaufort_Sea_diffw0"+to_string(week)+"y"+to_string(year)+"+landmask";
         else file = to_string(year)+"/Beaufort_Sea_diffw"+to_string(week)+"y"+to_string(year)+"+landmask";
         inputFile.open( file, ios::in | ios::binary );
-        
+
         float dataIn = 0;
         for (int i = 0; i <= total_nodes; i++) {
             inputFile.read( (char*)&dataIn, 4 ); // Read 4 bytes of data
@@ -71,19 +76,39 @@ int main(int argc, const char * argv[]) {
         }
         else week++;
     }
-    
-    // set graph to all null
-    for (int i = 0; i < 63; i++) {
-        for (int k = 0; k < 63; k++) {
-            graph950[i][k].head = nullptr;
-            graph925[i][k].head = nullptr;
-            graph900[i][k].head = nullptr;
-        }
-    }
+//    // create matrix
+//    matrix950 = new int*[3969];
+//    matrix925 = new int*[3969];
+//    matrix900 = new int*[3969];
+//    for (int i = 0; i < 3969; i++) {
+//        matrix950[i] = new int[3969];
+//        matrix925[i] = new int[3969];
+//        matrix900[i] = new int[3969];
+//    }
+
+//    // set graph to all null
+//    for (int i = 0; i < 63; i++) {
+//        for (int k = 0; k < 63; k++) {
+//            graph950[i][k].head = nullptr;
+//            graph925[i][k].head = nullptr;
+//            graph900[i][k].head = nullptr;
+//            // set all values to INF as default
+//            matrix950[i][k] = INT_MAX;
+//            matrix925[i][k] = INT_MAX;
+//            matrix900[i][k] = INT_MAX;
+//        }
+//    }
+//    // set diaganols in matrix to 0
+//    for (int i = 0; i < total_nodes; i++) {
+//        matrix950[i][i] = 0;
+//        matrix925[i][i] = 0;
+//        matrix900[i][i] = 0;
+//    }
     // get medians for time efficiency
     getMedians();
     // build graph by comparing nodes, starting at (0,0)
     buildGraph(0, 0);
+    
     // print degrees for given graph
     cout << "\nDegree Distribution for 0.95\n--------------------------\n";
     degreeDistribution(graph950);
@@ -98,17 +123,20 @@ int main(int argc, const char * argv[]) {
     DFS(graph925);
     cout << "\nComponent Size for 0.9\n--------------------------\n";
     DFS(graph900);
-    
+
     cout << "\nCluster Coefficients\n--------------------------\n";
     cout << "0.95: " << meanCluster(graph950);
     cout << "\n0.925: " << meanCluster(graph925);
     cout << "\n0.9: " << meanCluster(graph900) << "\n";
 
+//    cout << "\nShortest Path\n--------------------------\n";
+//    cout << "0.9: " << shortestPath(matrix900);
+
     return 0;
 }
 // recursive algorithm to build graph by comparing nodes to each other (combinations)
 void buildGraph(int x1, int y1) {
-    
+
     int sx2, sy2;
     // base case, if end of nodes is reached
     if (x1 == 62 && y1 == 62) return;
@@ -137,11 +165,11 @@ void buildGraph(int x1, int y1) {
             y2++;
         }
         else x2++;
-        
+        delete edge; // free memory
     }
     // break loop at (0,63), which is out of bounds (last node is (62, 62))
     while(y2 != 63);
-    
+
     //increment x1, y1
     if (x1 == 62) {
         x1 = 0;
@@ -156,20 +184,20 @@ bool* isEdge(int x1, int y1, int x2, int y2) {
     // 0 = 0.95, 1 = 0.925, 2 = 0.9
     bool* edge = new bool[3];
     edge[0] = false; edge[1] = false; edge[2] = false;
-    
+
     int size = total_weeks; // go thru all weeks
     float sum_1_2 = 0;
-    
+
     // check if land cell, dont do calculation if so
     if (cells[x1][y1][0] == 168 || cells[x2][y2][0] == 168) return edge;
-    
+
     // get median values
     float median_1 = median[x1][y1];
     float median_2 = median[x2][y2];
     // get sum values
     float sum_1 = sum[x1][y1];
     float sum_2 = sum[x2][y2];
-    
+
     // sum up 1_2
     for (int i = 0; i < size; i++) {
         sum_1_2 += (cells[x1][y1][i] - median_1) * (cells[x2][y2][i] - median_2);
@@ -177,7 +205,7 @@ bool* isEdge(int x1, int y1, int x2, int y2) {
     // calculate total using 'r' formula and compare to threshold
     float total = sum_1_2 / sqrt(sum_1 * sum_2);
     total = abs(total);
-    
+
     // check total against each threshold (must be greater or equal)
     if (total >= 0.95) edge[0] = true;
     if (total >= 0.925) edge[1] = true;
@@ -212,6 +240,15 @@ void addEdge(int x1, int y1, int x2, int y2, struct adjList graph[63][63]) {
         temp_2->next = graph[x2][y2].head;
         graph[x2][y2].head = temp_2;
     }
+
+//    // add edge to matrix
+//    // convert coordinates to a single number from 0 - 3968
+//    int m1 = x1 + (y1 * 63);
+//    int m2 = x2 + (y2 * 63);
+//    // add edge to both sides of matrix
+//    matrix[m1][m2] = 1;
+//    matrix[m2][m1] = 1;
+
 }
 void getMedians() {
     float med, s;
@@ -386,3 +423,44 @@ float meanCluster(struct adjList graph[63][63]) {
     }
     return total / (total_nodes - land_nodes); // calculate mean mean
 }
+//// use Floyd-Warsshall algorithm to find shortest path for all point
+//float shortestPath(int** matrix) {
+//    // iterate thru half the matrix
+//    for (int k = 0; k < 3968; k++) {
+//        for (int i = 0; i < 3968; i++) {
+//            for (int j = i+1; j < 3968; j++) {
+//                // first check for any INF values on right side (should be ignored if so)
+//                if (matrix[i][k] == INT_MAX || matrix[k][j] == INT_MAX) {}
+//                else { // make comparrisons
+//                    // check if left side == INF (will always be higher if so)
+//                    if (matrix[i][j] == INT_MAX) {
+//                        matrix[i][j] = matrix[i][k] + matrix[k][j];
+//                        matrix[j][i] = matrix[i][j]; // set the inverse to be the same
+//                    }
+//                    else if (matrix[i][j] > matrix[i][k] + matrix[k][j]) {
+//                        matrix[i][j] = matrix[i][k] + matrix[k][j];
+//                        matrix[j][i] = matrix[i][j]; // set inverse to be the same
+//                    }
+//                }
+//            }
+//        }
+//        cout << k << "\n";
+//    }
+//    // then find and return mean
+//    float mean = 0;
+//    int inf_values = 0;
+//
+//    for (int x = 0; x < 3968; x++) {
+//        for (int y = 0; y < 3968; y++) {
+//            if (matrix[x][y] == INT_MAX) {inf_values++;}
+//            else {
+//                mean += matrix[x][y];
+//                if (matrix[x][y] != 0) cout << "test\n";
+//            }
+//        }
+//    }
+//
+//    mean = mean / (total_nodes - land_nodes - inf_values);
+//
+//    return mean;
+//}

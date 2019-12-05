@@ -3,6 +3,22 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "shortestPath(int**):main.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(int*(&amp;)[3969])*matrix950">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "main:main.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(int*(&amp;)[3969])*matrix900">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "isEdge(int, int, int, int, int):main.cpp">
       </ContextState>
    </ContextStates>
